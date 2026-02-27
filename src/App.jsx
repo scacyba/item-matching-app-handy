@@ -17,9 +17,8 @@ const defaultPlanText = JSON.stringify(
 );
 
 const defaultFixedSchema = [
-  { name: 'col1', length: 10 },
-  { name: 'col2', length: 10 },
-  { name: 'col3', length: 10 }
+  { name: 'code', length: 13 },
+  { name: 'plannedQty', length: 10 }
 ];
 
 function parseCsv(text) {
