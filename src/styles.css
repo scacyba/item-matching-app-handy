@@ -123,3 +123,88 @@ li {
 li.done {
   background: #dcfce7;
 }
+
+.format-fieldset {
+  border: 2px solid #d4dbe7;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.format-fieldset label {
+  margin-right: 16px;
+  font-weight: 600;
+}
+
+.file-picker-label {
+  display: block;
+  font-weight: 600;
+}
+
+.file-picker-label input {
+  display: block;
+  margin-top: 6px;
+}
+
+.file-name {
+  margin: 6px 0 0;
+}
+
+.fixed-config {
+  margin-top: 14px;
+  border-top: 1px solid #e3e8ef;
+  padding-top: 10px;
+}
+
+.fixed-config h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.fixed-config label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.fixed-config input[type='number'],
+.fixed-config input[type='text'] {
+  width: 100%;
+  border: 1px solid #cad2df;
+  border-radius: 8px;
+  min-height: 40px;
+  padding: 8px;
+}
+
+.fixed-config table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.fixed-config th,
+.fixed-config td {
+  border: 1px solid #e3e8ef;
+  padding: 8px;
+  text-align: left;
+}
+
+.hint {
+  margin-top: 8px;
+  color: #4b5563;
+}
+
+.error {
+  margin-top: 6px;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+details {
+  margin-top: 14px;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
