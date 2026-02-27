@@ -1,0 +1,125 @@
+:root {
+  font-family: 'Noto Sans JP', system-ui, sans-serif;
+  color: #1b1b1b;
+  background: #f4f6f8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+.panel {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 20px rgba(20, 30, 50, 0.08);
+}
+
+textarea,
+.scanner,
+button {
+  width: 100%;
+  font-size: 1.2rem;
+  border-radius: 12px;
+}
+
+textarea,
+.scanner {
+  border: 2px solid #cad2df;
+  padding: 14px;
+}
+
+.scanner {
+  min-height: 62px;
+  font-size: 1.5rem;
+}
+
+button {
+  min-height: 60px;
+  border: none;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+button.primary {
+  background: #0a7d32;
+  color: #fff;
+}
+
+.status {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.result {
+  margin-top: 12px;
+  border-radius: 12px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  background: #e6ebf1;
+  color: #1f2937;
+}
+
+.result.ok {
+  background: #16a34a;
+  color: white;
+}
+
+.result.ng {
+  background: #dc2626;
+  color: white;
+}
+
+.complete-banner {
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  background: #14532d;
+  color: #fff;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #e3e8ef;
+  font-size: 1.1rem;
+}
+
+li.done {
+  background: #dcfce7;
+}
