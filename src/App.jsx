@@ -16,6 +16,8 @@ const defaultPlanText = JSON.stringify(
   2
 );
 
+const fixedSchemaStorageKey = 'fixed-schema-settings';
+
 const defaultFixedSchema = [
   { name: 'code', length: 13 },
   { name: 'plannedQty', length: 10 }
@@ -49,12 +51,12 @@ function parseCsv(text) {
   });
 }
 
-export function parseFixedWidth(text, schema) {
+function normalizeSchema(schema) {
   if (!Array.isArray(schema) || schema.length === 0) {
     throw new Error('項目を1つ以上設定してください');
   }
 
-  const normalizedSchema = schema.map((column, index) => {
+  return schema.map((column, index) => {
     const name = String(column?.name || '').trim();
     const length = Number(column?.length);
 
@@ -68,6 +70,10 @@ export function parseFixedWidth(text, schema) {
 
     return { name, length };
   });
+}
+
+export function parseFixedWidth(text, schema) {
+  const normalizedSchema = normalizeSchema(schema);
 
   const lines = text.split(/\r?\n/).filter((line) => line.trim().length > 0);
   if (lines.length === 0) {
@@ -132,6 +138,7 @@ export default function App() {
   const [uploadFileName, setUploadFileName] = useState('');
   const [fixedSchema, setFixedSchema] = useState(defaultFixedSchema);
   const [fixedError, setFixedError] = useState('');
+  const [scannerFocusLocked, setScannerFocusLocked] = useState(true);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -150,8 +157,35 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(fixedSchemaStorageKey);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      const normalized = normalizeSchema(parsed);
+      setFixedSchema(normalized);
+    } catch (error) {
+      console.error(error);
+      setFixedSchema(defaultFixedSchema);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(fixedSchemaStorageKey, JSON.stringify(fixedSchema));
+  }, [fixedSchema]);
+
+  useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  const keepScannerFocus = (event) => {
+    const clickedControl = event?.target?.closest?.('input, textarea, button, select, summary');
+    if (clickedControl || !scannerFocusLocked) return;
+
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(inputValue.length, inputValue.length);
+    });
+  };
 
   const planMap = useMemo(() => {
     return new Map(plan.map((item) => [item.code, item]));
@@ -308,10 +342,18 @@ export default function App() {
   const resultClass = result.status === 'ok' ? 'result ok' : result.status === 'ng' ? 'result ng' : 'result';
 
   return (
-    <main className="app" onClick={() => inputRef.current?.focus()}>
+    <main className="app" onClick={keepScannerFocus}>
       <h1>段ボール検品アプリ</h1>
 
-      <section className="panel">
+      <section
+        className="panel"
+        onFocusCapture={() => setScannerFocusLocked(false)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setScannerFocusLocked(true);
+          }
+        }}
+      >
         <h2>1) 予定リスト事前ロード（入力フォーマット対応）</h2>
 
         <fieldset className="format-fieldset">
@@ -405,7 +447,12 @@ export default function App() {
             rows={8}
             aria-label="予定リストJSON"
           />
-          <button className="primary" onClick={handleLoadPlan}>予定リストを保存</button>
+          <button
+            className="primary"
+            onClick={handleLoadPlan}
+          >
+            予定リストを保存
+          </button>
         </details>
 
         <p className="status">状態: {planStatus}</p>
@@ -418,6 +465,8 @@ export default function App() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleScanKeyDown}
+          onBlur={keepScannerFocus}
+          onFocus={() => setScannerFocusLocked(true)}
           className="scanner"
           placeholder="バーコード入力（スキャンで自動入力）"
           inputMode="numeric"
